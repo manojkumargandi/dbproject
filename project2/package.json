@@ -1,0 +1,9 @@
+{
+    "name": "Student Management",
+    "description": "Student management backend",
+    "version": "0.1",
+    "dependencies": {
+        "express": "^4.17.1",
+        "neo4j": "^2.0.0-RC2"
+    }
+}
