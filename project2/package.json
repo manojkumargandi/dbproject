@@ -1,9 +1,11 @@
 {
-    "name": "Student Management",
+    "name": "StudentManagement",
     "description": "Student management backend",
-    "version": "0.1",
+    "version": "0.1.0",
     "dependencies": {
+        "body-parser": "^1.19.0",
         "express": "^4.17.1",
-        "neo4j": "^2.0.0-RC2"
+        "neo4j": "^2.0.0-RC1",
+        "uuid": "^3.3.2"
     }
 }
