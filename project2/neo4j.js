@@ -1,2 +1,2 @@
-const neo4j = require('neo4j')
-const db = module.exports = new neo4j.GraphDatabase('http://neo4j:neo4j@localhost:7474')
+const neo4j = require('neo4j-driver').v1;
+const driver = module.exports = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "Dillu"));

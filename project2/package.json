@@ -2,10 +2,15 @@
     "name": "StudentManagement",
     "description": "Student management backend",
     "version": "0.1.0",
+    "scripts": {
+        "start": "node app.js"
+    },
     "dependencies": {
         "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
         "express": "^4.17.1",
         "neo4j": "^2.0.0-RC1",
+        "neo4j-driver": "^1.7.5",
         "uuid": "^3.3.2"
     }
 }
