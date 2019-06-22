@@ -74,6 +74,23 @@ exports.createPerson = function (req, res) {
         'Return c,r,p'
     ].join('\n');
 
+    var cquery = [
+        'Match (p:Person {uid: {pid}})',
+        'Match (c:Class {classTime: {classTime}, classDay: {classDay}, classLevel: {classLevel}})',
+        'Match (r:Rank{rankType: {rankType}})',
+        'Create (p)-[q:Has_Rank]->(r)',
+        'Create (p)-[v:Has_Class]->(c)',
+        'Return p,c,r'
+    ].join('\n');
+
+    var classparams = {
+        pid: id,
+        classTime: req.body.classes.classTime,
+        classDay: req.body.classes.classDay,
+        classLevel: req.body.classes.classLevel,
+        rankType: req.body.rank
+    }
+
     var params = {
         uid: id,
         firstname: req.body.firstname,
@@ -113,7 +130,19 @@ exports.createPerson = function (req, res) {
         .run(query, params)
         .subscribe({
             onNext: function (record) {
-                p_id = record.get(n.uid);
+                session
+                .run(cquery, classparams)
+                .subscribe({
+                    onNext: function(re) {
+                        console.log(re);
+                    },
+                    onCompleted: function() {
+                        console.log('here');
+                    },
+                    onError: function(error) {
+                        console.log(error)
+                    }
+                });
                 if (req.body.parentInfo) {
                     session
                         .run(ParentQuery, parentParams)
@@ -147,7 +176,7 @@ exports.createPerson = function (req, res) {
                 }
             },
             onCompleted: function () {
-                createRankAndClass(req.body.classes, req.body.rank, id);
+                // createRankAndClass(req.body.classes, req.body.rank, id);
                 if (!req.body.parentInfo) {
                     session.close();
                     res.send(data);
@@ -631,6 +660,62 @@ exports.getStudentAtt = function (req, res) {
     var params = {
         sid: req.query.sid
     }
+
+    session
+    .run(query, params)
+    .subscribe({
+        onNext: function(records) {
+            data.push(records.toObject());
+        },
+        onCompleted: function() {
+            session.close();
+            res.send(data);
+        },
+        onError: function(error) {
+            console.log(error);
+            res.send(error);
+        }
+    });
+}
+
+exports.getInactive = function (req, res) {
+    var query = [
+        'Match (p:Person)',
+        'Where p.isActive="false"',
+        'Return p'
+    ].join('\n');
+
+    var data = [];
+
+    session
+    .run(query)
+    .subscribe({
+        onNext: function(records) {
+            data.push(records.toObject());
+        },
+        onCompleted: function() {
+            session.close();
+            res.send(data);
+        },
+        onError: function(error) {
+            console.log(error);
+            res.send(error)
+        }
+    });
+}
+
+exports.makeActive = function (req, res) {
+    var query = [
+        'Match (n:Person{uid: {sid}})',
+        'Set n.isActive="true"',
+        'Return n'
+    ].join('\n');
+
+    var params = {
+        sid: req.body.sid
+    };
+
+    var data = [];
 
     session
     .run(query, params)

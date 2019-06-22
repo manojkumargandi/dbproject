@@ -34,3 +34,7 @@ app.post('/api/cattandance', controller.createAttendance);
 app.get('/api/gsattendance', controller.getStudentAtt);
 
 app.post('/api/makeinactive', controller.makeInactive);
+
+app.get('/api/getinactive', controller.getInactive);
+
+app.post('/api/makeactive', controller.makeActive);
