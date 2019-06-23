@@ -424,17 +424,17 @@ exports.awardRank = function (req, res) {
     var id = uuid();
     var query = [
         'Match (p:Person)',
-        'Where p.uid = {p_uid}',
+        'Where p.phone = {p_uid}',
         'Match (r:Rank)',
-        'Where r.uid = {r_uid}',
+        'Where r.rankType = {r_uid}',
         'Create (p)-[a:Awarded{date :{awardDate}}]->(r)',
         'Return p,a,r'
     ].join('\n');
 
     var params = {
-        p_uid: req.body.p_uid,
-        r_uid: req.body.r_uid,
-        awardDate: req.body.awardDate,
+        p_uid: req.body.phone,
+        r_uid: req.body.type,
+        awardDate: req.body.date,
     }
 
     var data = [];
